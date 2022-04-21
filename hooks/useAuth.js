@@ -12,10 +12,16 @@ const config = {
 };
 
 export const AuthProvider = ({ children }) => {
-  const signInWithGoogle = async () => {};
+  const signInWithGoogle = async () => {
+    Google.logInAsync(config).then(async (loginResult) => {
+      if (loginResult.type === "success") {
+        console.log("Login Hogaya");
+      }
+    });
+  };
 
   return (
-    <AuthContext.Provider value={{ user: null }}>
+    <AuthContext.Provider value={{ user: null, signInWithGoogle }}>
       {children}
     </AuthContext.Provider>
   );
