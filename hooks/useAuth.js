@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import * as Google from "expo-google-app-auth";
 import { IOS_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
 import {
@@ -8,6 +8,7 @@ import {
   signInWithCredential,
   signOut,
 } from "@firebase/auth";
+
 import { auth } from "../firebase";
 
 const AuthContext = createContext();
@@ -20,23 +21,56 @@ const config = {
 };
 
 export const AuthProvider = ({ children }) => {
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(null);
+
+  useEffect(
+    () =>
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          //User Logged-In
+          //console.log("Boom1", user);
+          setUser(user);
+        } else {
+          //User Logged-Out
+          //console.log("Boom2", user);
+          setUser(null);
+        }
+      }),
+    []
+  );
+
+  const logOut = () => {
+    setLoading(true);
+    signOut(auth)
+      .catch((error) => setError(error))
+      .finally(() => setLoading(false));
+  };
+
   const signInWithGoogle = async () => {
-    await Google.logInAsync(config).then(async (loginResult) => {
-      if (loginResult.type === "success") {
-        console.log("Login Hogaya");
+    setLoading(null);
+    await Google.logInAsync(config)
+      .then(async (loginResult) => {
+        if (loginResult.type === "success") {
+          console.log("Login Hogaya");
 
-        const { idToken, acessToken } = loginResult;
-        const credential = GoogleAuthProvider.credential(idToken, acessToken);
+          const { idToken, acessToken } = loginResult;
+          const credential = GoogleAuthProvider.credential(idToken, acessToken);
 
-        await signInWithCredential(auth, credential);
-      }
+          await signInWithCredential(auth, credential);
+        }
 
-      return Promise.reject();
-    });
+        return Promise.reject();
+      })
+      .catch((error) => setError(error))
+      .finally(() => setLoading(false));
   };
 
   return (
-    <AuthContext.Provider value={{ user: null, signInWithGoogle }}>
+    <AuthContext.Provider
+      value={{ user, loading, error, logOut, signInWithGoogle }}
+    >
       {children}
     </AuthContext.Provider>
   );
