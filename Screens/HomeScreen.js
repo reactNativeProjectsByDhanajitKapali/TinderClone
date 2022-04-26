@@ -90,7 +90,7 @@ const HomeScreen = () => {
             style={{ height: 40, width: 40, borderRadius: 20 }}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Modal")}>
           <Image
             source={require("../src/images/tinder-logo-96.png")}
             style={{ height: 60, width: 60 }}
