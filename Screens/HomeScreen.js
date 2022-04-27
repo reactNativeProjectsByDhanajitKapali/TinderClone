@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 import useAuth from "../hooks/useAuth";
 import Swiper from "react-native-deck-swiper";
@@ -16,6 +16,7 @@ import { Entypo } from "react-native-vector-icons";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { user, logOut } = useAuth();
+  const [profiles, setProfiles] = useState([]);
   const swiperRef = useRef(null);
 
   const DUMMY_DATA = [
@@ -119,7 +120,7 @@ const HomeScreen = () => {
       >
         <Swiper
           ref={swiperRef}
-          cards={DUMMY_DATA}
+          cards={profiles}
           containerStyle={{ backgroundColor: "white" }}
           stackSize={5}
           cardIndex={0}
@@ -150,64 +151,87 @@ const HomeScreen = () => {
               },
             },
           }}
-          renderCard={(card) => (
-            <View
-              key={card}
-              style={{
-                backgroundColor: "#EC255A",
-                height: "75%",
-                borderRadius: 15,
-              }}
-            >
-              <Image
-                source={{ uri: card.photoURL }}
-                style={{
-                  height: "88%",
-                  width: "100%",
-                  borderTopLeftRadius: 15,
-                  borderTopRightRadius: 15,
-                }}
-              ></Image>
+          renderCard={(card) =>
+            card ? (
               <View
+                key={card}
+                style={{
+                  backgroundColor: "#EC255A",
+                  height: "75%",
+                  borderRadius: 15,
+                }}
+              >
+                <Image
+                  source={{ uri: card.photoURL }}
+                  style={{
+                    height: "88%",
+                    width: "100%",
+                    borderTopLeftRadius: 15,
+                    borderTopRightRadius: 15,
+                  }}
+                ></Image>
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    height: "12%",
+                    borderBottomLeftRadius: 15,
+                    borderBottomRightRadius: 15,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignContent: "center",
+                    alignItems: "center",
+                    borderColor: "gray",
+                    borderWidth: 0.2,
+                  }}
+                >
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={{ fontWeight: "600", fontSize: 20 }}>
+                      {card.firstName} {card.lastName}
+                    </Text>
+                    <Text style={{ fontSize: 15 }}>{card.occupation}</Text>
+                  </View>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginRight: 25,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: 25,
+                      }}
+                    >
+                      {card.age}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <View
+                key={card}
                 style={{
                   backgroundColor: "white",
-                  height: "12%",
-                  borderBottomLeftRadius: 15,
-                  borderBottomRightRadius: 15,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignContent: "center",
+                  justifyContent: "center",
                   alignItems: "center",
+                  borderRadius: 15,
+                  height: "75%",
                   borderColor: "gray",
                   borderWidth: 0.2,
                 }}
               >
-                <View style={{ marginLeft: 10 }}>
-                  <Text style={{ fontWeight: "600", fontSize: 20 }}>
-                    {card.firstName} {card.lastName}
-                  </Text>
-                  <Text style={{ fontSize: 15 }}>{card.occupation}</Text>
-                </View>
-                <View
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: 25,
-                  }}
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      fontSize: 25,
-                    }}
-                  >
-                    {card.age}
-                  </Text>
-                </View>
+                <Text style={{ fontSize: 22, fontWeight: "500" }}>
+                  No More Profiles
+                </Text>
+                <Image
+                  source={require("../src/images/nothing-found-64.png")}
+                  style={{ height: 100, width: 100, marginTop: 25 }}
+                />
               </View>
-            </View>
-          )}
+            )
+          }
         />
 
         <View
