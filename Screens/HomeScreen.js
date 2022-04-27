@@ -12,6 +12,8 @@ import { useNavigation } from "@react-navigation/core";
 import useAuth from "../hooks/useAuth";
 import Swiper from "react-native-deck-swiper";
 import { Entypo } from "react-native-vector-icons";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -73,7 +75,22 @@ const HomeScreen = () => {
     navigation.setOptions({
       headerShown: false,
     });
+
+    //Check if the User has a account on Our TinderClone app
+    getUserDetails();
   });
+
+  const getUserDetails = async () => {
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+      navigation.navigate("Modal");
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
