@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { setDoc, addDoc, doc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigation } from "@react-navigation/core";
 
@@ -23,7 +23,6 @@ const ModalScreen = () => {
   const isFormComplete = !imageUrl || !job || !age;
 
   const updateUserProfile = async () => {
-    const collectionRef = doc(db, "users");
     await setDoc(doc(db, "users", user.uid), {
       id: user.uid,
       displayName: user.displayName,

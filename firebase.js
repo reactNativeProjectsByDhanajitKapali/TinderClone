@@ -1,11 +1,11 @@
 // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAuth } from "firebase/auth";
-// import { getFireStore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
-import "firebase/compat/auth";
+// import firebase from "firebase/compat/app";
+// import "firebase/compat/firestore";
+// import "firebase/compat/auth";
 import {
   API_KEY,
   AUTH_DOMAIN,
@@ -28,11 +28,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const auth = initializeApp.auth;
-// const db = getFireStore();
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const db = firebaseApp.firestore;
-const auth = firebaseApp.auth();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
+// const db = firebaseApp.firestore;
+// const auth = firebaseApp.auth();
 
 export { auth, db };
