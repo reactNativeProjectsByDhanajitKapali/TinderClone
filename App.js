@@ -6,6 +6,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import { LogBox } from "react-native";
 
 LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 export default function App() {
   return (
