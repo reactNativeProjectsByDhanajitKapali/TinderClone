@@ -7,12 +7,19 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/core";
 import useAuth from "../hooks/useAuth";
 import Swiper from "react-native-deck-swiper";
 import { Entypo } from "react-native-vector-icons";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  where,
+  query,
+  collection,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 const HomeScreen = () => {
@@ -80,11 +87,28 @@ const HomeScreen = () => {
     getUserDetails();
   });
 
+  useEffect(() => {
+    getAllProfiles();
+  });
+
+  const getAllProfiles = async () => {
+    const q = query(collection(db, "users"), where("id", "!=", user.uid));
+    const querySnapshot = await getDocs(q);
+    let arr = [];
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      arr.push(doc.data());
+      //console.log(doc.id, " => ", doc.data(), user.uid);
+    });
+    console.log(arr);
+    setProfiles(arr);
+  };
+
   const getUserDetails = async () => {
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      //console.log("Document data:", docSnap.data());
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
