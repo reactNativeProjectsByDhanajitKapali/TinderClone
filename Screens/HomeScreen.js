@@ -100,8 +100,10 @@ const HomeScreen = () => {
       arr.push(doc.data());
       //console.log(doc.id, " => ", doc.data(), user.uid);
     });
-    console.log(arr);
-    setProfiles(arr);
+    //console.log(arr);
+    if (profiles.length != arr.length) {
+      setProfiles(arr);
+    }
   };
 
   const getUserDetails = async () => {
@@ -227,9 +229,9 @@ const HomeScreen = () => {
                 >
                   <View style={{ marginLeft: 10 }}>
                     <Text style={{ fontWeight: "600", fontSize: 20 }}>
-                      {card.firstName} {card.lastName}
+                      {card.displayName}
                     </Text>
-                    <Text style={{ fontSize: 15 }}>{card.occupation}</Text>
+                    <Text style={{ fontSize: 15 }}>{card.job}</Text>
                   </View>
                   <View
                     style={{
