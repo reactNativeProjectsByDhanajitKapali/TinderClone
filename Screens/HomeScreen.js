@@ -29,6 +29,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const { user, logOut } = useAuth();
   const [profiles, setProfiles] = useState([]);
+  const [logedInUser, setLogedInUser] = useState(null);
   const swiperRef = useRef(null);
 
   const DUMMY_DATA = [
@@ -139,6 +140,9 @@ const HomeScreen = () => {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       //console.log("Document data:", docSnap.data());
+      if (!logedInUser) {
+        setLogedInUser(docSnap.data());
+      }
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
@@ -179,12 +183,9 @@ const HomeScreen = () => {
 
     const userSwiped = profiles[index];
 
-    //Get the details of the
-    //const currentUser = getDoc(doc(db, "users", user.uid)).data();
-
     //Now check if the Person has already swiped on you or not
-    getDoc(doc(db, "users", userSwiped.id, "rightSwiped", user.uid)).then(
-      (documentSnapshot) => {
+    getDoc(doc(db, "users", userSwiped.id, "rightSwiped", user.uid))
+      .then((documentSnapshot) => {
         if (documentSnapshot.exists()) {
           //User has already Right-Swiped on you
           console.log("Congrats, You Got a Match");
@@ -192,7 +193,7 @@ const HomeScreen = () => {
           //Create A Match
           setDoc(doc(db, "matches", generateId(user.uid, userSwiped.id)), {
             users: {
-              [user.uid]: user.uid,
+              [user.uid]: logedInUser,
               [userSwiped.id]: userSwiped,
             },
             usersMatched: [user.uid, userSwiped.id],
@@ -209,8 +210,10 @@ const HomeScreen = () => {
         } else {
           //Current User has Right-Swiped as first interaction b/t the two person
         }
-      }
-    );
+      })
+      .catch((error) => {
+        console.log("Unable to Fetch Match Data", error);
+      });
 
     //Added this Swiped User to current user's RightSwiped List
     pushSwipeInfoToFirestore("rightSwiped", userSwiped);
