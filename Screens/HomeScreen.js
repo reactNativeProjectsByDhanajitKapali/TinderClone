@@ -20,6 +20,7 @@ import {
   where,
   query,
   collection,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -90,6 +91,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getAllProfiles();
+    //getAllTheProfiles();
   });
 
   const getAllProfiles = async () => {
@@ -117,6 +119,25 @@ const HomeScreen = () => {
       console.log("No such document!");
       navigation.navigate("Modal");
     }
+  };
+
+  const getAllTheProfiles = async () => {
+    let unsub;
+    const fetchCards = async () => {
+      //console.log("Boom");
+      unsub = onSnapshot(collection(db, "users"), (snapshot) => {
+        setProfiles(
+          snapshot.docs
+            .filter((doc) => doc.id !== user.uid)
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+        );
+      });
+    };
+    fetchCards();
+    return unsub;
   };
 
   const swipedLeft = (index) => {
