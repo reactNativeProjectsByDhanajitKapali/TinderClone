@@ -26,10 +26,13 @@ const ChatList = () => {
     [user]
   );
 
-  console.log("Boom", matches);
+  //console.log("Boom", matches);
   return matches && matches.length > 0 ? (
     <FlatList
-      style={{ backgroundColor: "pink", height: "100%" }}
+      style={{
+        backgroundColor: "pink",
+        height: "100%",
+      }}
       data={matches}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <ChatRow matchDetails={item} />}
