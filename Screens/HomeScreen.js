@@ -188,7 +188,7 @@ const HomeScreen = () => {
           //User has already Right-Swiped on you
           //Create A Match
           console.log("Congrats, You Got a Match");
-          navigation.navigate("Match");
+          navigation.navigate("Match", { user, userSwiped });
         } else {
           //Current User has Right-Swiped as first interaction b/t the two person
         }
