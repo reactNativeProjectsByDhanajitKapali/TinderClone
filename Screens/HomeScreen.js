@@ -177,8 +177,29 @@ const HomeScreen = () => {
     if (!profiles[index]) return;
 
     const userSwiped = profiles[index];
+
+    //Get the details of the
+    //const currentUser = getDoc(doc(db, "users", user.uid)).data();
+
+    //Now check if the Person has already swiped on you or not
+    getDoc(doc(db, "users", userSwiped.id, "rightSwiped", user.uid)).then(
+      (documentSnapshot) => {
+        if (documentSnapshot.exists()) {
+          //User has already Right-Swiped on you
+          //Create A Match
+          console.log("Congrats, You Got a Match");
+          navigation.navigate("Match");
+        } else {
+          //Current User has Right-Swiped as first interaction b/t the two person
+        }
+      }
+    );
+
+    //Added this Swiped User to current user's RightSwiped List
     pushSwipeInfoToFirestore("rightSwiped", userSwiped);
   };
+
+  const generateId = (id1, id2) => (id1 > id2 ? id1 + id2 : id2 + id1);
 
   const pushSwipeInfoToFirestore = async (pushType, theData) => {
     await setDoc(doc(db, "users", user.uid, pushType, theData.id), theData)
