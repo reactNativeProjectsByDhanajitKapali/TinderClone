@@ -95,16 +95,33 @@ const HomeScreen = () => {
   });
 
   const getAllProfiles = async () => {
-    const q = query(collection(db, "users"), where("id", "!=", user.uid));
-    const querySnapshot = await getDocs(q);
+    //Get the Swiped Profiles
+    let swippedIds = [];
+    const querySnapshotForSwippedIds = await getDocs(
+      collection(db, "users", user.uid, "passes")
+    );
+    querySnapshotForSwippedIds.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      swippedIds.push(doc.data().id);
+      //console.log(doc.id, " => ", doc.data());
+    });
+    swippedIds.push(user.uid);
+    console.log(swippedIds);
+
+    const q = query(
+      collection(db, "users"),
+      where("id", "not-in", [...swippedIds])
+    );
+    const querySnapshotForUnswipedProfiles = await getDocs(q);
     let arr = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshotForUnswipedProfiles.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       arr.push(doc.data());
       //console.log(doc.id, " => ", doc.data(), user.uid);
     });
     //console.log(arr);
     if (profiles.length != arr.length) {
+      console.log(arr);
       setProfiles(arr);
     }
   };
@@ -144,7 +161,7 @@ const HomeScreen = () => {
     if (!profiles[index]) return;
 
     const userSwiped = profiles[index];
-    console.log("Left Swiped", userSwiped);
+    //console.log("Left Swiped", userSwiped);
 
     pushSwipeInfoToFirestore("passes", userSwiped);
   };
