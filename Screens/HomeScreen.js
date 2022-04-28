@@ -95,15 +95,22 @@ const HomeScreen = () => {
   });
 
   const getAllProfiles = async () => {
-    //Get the Swiped Profiles
+    //Get the Swiped Passed Profiles
     let swippedIds = [];
-    const querySnapshotForSwippedIds = await getDocs(
-      collection(db, "users", user.uid, "passes")
+    const querySnapshotForSwippedLeftIds = await getDocs(
+      collection(db, "users", user.uid, "leftSwiped")
     );
-    querySnapshotForSwippedIds.forEach((doc) => {
+    querySnapshotForSwippedLeftIds.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       swippedIds.push(doc.data().id);
       //console.log(doc.id, " => ", doc.data());
+    });
+    //Get the Swiped Right Profiles
+    const querySnapshotForSwippedRightsIds = await getDocs(
+      collection(db, "users", user.uid, "rightSwiped")
+    );
+    querySnapshotForSwippedRightsIds.forEach((doc) => {
+      swippedIds.push(doc.data().id);
     });
     swippedIds.push(user.uid);
     console.log(swippedIds);
@@ -163,18 +170,23 @@ const HomeScreen = () => {
     const userSwiped = profiles[index];
     //console.log("Left Swiped", userSwiped);
 
-    pushSwipeInfoToFirestore("passes", userSwiped);
+    pushSwipeInfoToFirestore("leftSwiped", userSwiped);
   };
 
-  const swipedRight = (index) => {};
+  const swipedRight = (index) => {
+    if (!profiles[index]) return;
+
+    const userSwiped = profiles[index];
+    pushSwipeInfoToFirestore("rightSwiped", userSwiped);
+  };
 
   const pushSwipeInfoToFirestore = async (pushType, theData) => {
     await setDoc(doc(db, "users", user.uid, pushType, theData.id), theData)
       .then(() => {
-        console.log("Push Sucess");
+        console.log("Swipe Push Sucess");
       })
       .catch((error) => {
-        console.log("Push Failure");
+        console.log("Swipe Push Failure");
       });
   };
 
