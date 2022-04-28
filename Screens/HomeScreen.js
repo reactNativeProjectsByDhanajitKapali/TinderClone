@@ -21,6 +21,7 @@ import {
   query,
   collection,
   onSnapshot,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -113,7 +114,7 @@ const HomeScreen = () => {
       swippedIds.push(doc.data().id);
     });
     swippedIds.push(user.uid);
-    console.log(swippedIds);
+    //console.log(swippedIds);
 
     const q = query(
       collection(db, "users"),
@@ -128,7 +129,7 @@ const HomeScreen = () => {
     });
     //console.log(arr);
     if (profiles.length != arr.length) {
-      console.log(arr);
+      //console.log(arr);
       setProfiles(arr);
     }
   };
@@ -186,8 +187,24 @@ const HomeScreen = () => {
       (documentSnapshot) => {
         if (documentSnapshot.exists()) {
           //User has already Right-Swiped on you
-          //Create A Match
           console.log("Congrats, You Got a Match");
+
+          //Create A Match
+          setDoc(doc(db, "matches", generateId(user.uid, userSwiped.id)), {
+            users: {
+              [user.uid]: user.uid,
+              [userSwiped.id]: userSwiped,
+            },
+            usersMatched: [user.uid, userSwiped.id],
+            timeStamp: serverTimestamp(),
+          })
+            .then(() => {
+              console.log("matches creation Sucess");
+            })
+            .catch(() => {
+              console.log("matches creation Failure");
+            });
+
           navigation.navigate("Match", { user, userSwiped });
         } else {
           //Current User has Right-Swiped as first interaction b/t the two person
