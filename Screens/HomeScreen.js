@@ -16,6 +16,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  setDoc,
   where,
   query,
   collection,
@@ -118,6 +119,27 @@ const HomeScreen = () => {
     }
   };
 
+  const swipedLeft = (index) => {
+    if (!profiles[index]) return;
+
+    const userSwiped = profiles[index];
+    console.log("Left Swiped", userSwiped);
+
+    pushSwipeInfoToFirestore("passes", userSwiped);
+  };
+
+  const swipedRight = (index) => {};
+
+  const pushSwipeInfoToFirestore = async (pushType, theData) => {
+    await setDoc(doc(db, "users", user.uid, pushType, theData.id), theData)
+      .then(() => {
+        console.log("Push Sucess");
+      })
+      .catch((error) => {
+        console.log("Push Failure");
+      });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* HeaderView Start*/}
@@ -169,11 +191,13 @@ const HomeScreen = () => {
           cardIndex={0}
           animateCardOpacity={true}
           verticalSwipe={false}
-          onSwipedLeft={() => {
+          onSwipedLeft={(cardIndex) => {
             console.log("Swiped NOPE");
+            swipedLeft(cardIndex);
           }}
-          onSwipedRight={() => {
+          onSwipedRight={(cardIndex) => {
             console.log("Swiped MATCH");
+            swipedRight(cardIndex);
           }}
           overlayLabels={{
             left: {
