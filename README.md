@@ -12,6 +12,12 @@ Features :-
 
 </div>
 
+## ScreenRecording
+
+https://user-images.githubusercontent.com/37000235/165935552-2e7266c1-7360-4c65-86c1-404e9b52ec7a.mp4
+
+
+
 ## Screenshots
 <table>
         <tr>
