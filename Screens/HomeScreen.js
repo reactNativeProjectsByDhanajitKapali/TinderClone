@@ -314,7 +314,7 @@ const HomeScreen = () => {
               <View
                 key={card}
                 style={{
-                  backgroundColor: "#EC255A",
+                  backgroundColor: "white",
                   height: "75%",
                   borderRadius: 15,
                 }}

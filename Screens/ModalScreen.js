@@ -42,7 +42,7 @@ const ModalScreen = () => {
   return (
     <View style={{ alignItems: "center" }}>
       <Image
-        source={{ uri: "https://links.papareact.com/2pf" }}
+        source={require("../src/images/Tinder-logo.png")}
         resizeMode="contain"
         style={{ height: 70, width: "100%" }}
       />
