@@ -12,12 +12,21 @@ import {
   FlatList,
   Platform,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import useAuth from "../hooks/useAuth";
 import { useRoute } from "@react-navigation/core";
 import SenderMessage from "../Components/SenderMessage";
 import RecieverMessage from "../Components/RecieverMessage";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
+import { db } from "../firebase";
 
 const MessageScreen = () => {
   const { user } = useAuth();
@@ -41,6 +50,26 @@ const MessageScreen = () => {
     "Hello",
   ]);
 
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, "matches", matchDetails.id, "messages"),
+          orderBy("timestamp", "asc")
+        ),
+        (snapshot) =>
+          setMessages(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+          )
+      ),
+    [matchDetails, id]
+  );
+
+  console.log(messages);
+
   const getMatchedUserInfo = (users, userLogedIn) => {
     const newUsers = { ...users };
     delete newUsers[userLogedIn];
@@ -49,7 +78,17 @@ const MessageScreen = () => {
     return { id, ...theUser };
   };
 
-  const sendMessage = () => {};
+  const sendMessage = () => {
+    addDoc(collection(db, "matches", matchDetails.id, "messages"), {
+      timestamp: serverTimestamp(),
+      userId: user.uid,
+      displayName: user.displayName,
+      photoURL: matchDetails.users[user.uid].photoURL,
+      message: inputMessage,
+    });
+
+    setInputMessage("");
+  };
 
   return (
     <SafeAreaView style={{ backgroundColor: "pink", flex: 1 }}>
@@ -66,8 +105,14 @@ const MessageScreen = () => {
           <FlatList
             data={messages}
             style={{ padding: 4 }}
-            //keyExtractor={(item) => item}
-            renderItem={(item) => <RecieverMessage message={item} />}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item: message }) =>
+              message.userId === user.uid ? (
+                <SenderMessage key={message.id} message={message} />
+              ) : (
+                <RecieverMessage key={message.id} message={message} />
+              )
+            }
           />
         </TouchableWithoutFeedback>
 

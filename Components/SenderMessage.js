@@ -15,9 +15,7 @@ const SenderMessage = ({ message }) => {
         //marginLeft: "auto",
       }}
     >
-      <Text style={{ fontSize: 15, color: "white" }}>
-        {message.message}Hi, There
-      </Text>
+      <Text style={{ fontSize: 15, color: "white" }}>{message.message}</Text>
     </View>
   );
 };

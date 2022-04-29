@@ -5,7 +5,7 @@ const RecieverMessage = ({ message }) => {
   return (
     <View style={{ flexDirection: "row", marginBottom: 10 }}>
       <Image
-        source={require("../src/images/send-letter-96.png")}
+        source={{ uri: message.photoURL }}
         style={{ height: 45, width: 45, marginLeft: 5, marginTop: 5 }}
         resizeMode="contain"
       />
@@ -28,7 +28,7 @@ const RecieverMessage = ({ message }) => {
         }}
       >
         <Text style={{ fontSize: 15, color: "white", marginLeft: 10 }}>
-          {message.message}Hi, There
+          {message.message}
         </Text>
       </View>
     </View>
