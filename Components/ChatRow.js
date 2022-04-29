@@ -20,21 +20,21 @@ const ChatRow = ({ matchDetails }) => {
 
   useEffect(() => {
     setMatchedUserInfo(getMatchedUserInfo(matchDetails.users, user.uid));
-    setTimeout(() => {
-      console.log("MatchedUserInfo", matchedUserInfo);
-    }, 500);
+    // setTimeout(() => {
+    //   console.log("MatchedUserInfo", matchedUserInfo);
+    // }, 500);
   }, [matchDetails, user]);
 
   useEffect(
     () =>
       onSnapshot(
         query(
-          collection(db, "matches", matchDetails.id, "messages"),
+          collection(db, "matches", matchDetails?.id, "messages"),
           orderBy("timestamp", "desc")
         ),
         (snapshot) => setLastMessage(snapshot.docs[0]?.data()?.message)
       ),
-    [matchDetails, id]
+    [matchDetails, db]
   );
 
   const getMatchedUserInfo = (users, userLogedIn) => {

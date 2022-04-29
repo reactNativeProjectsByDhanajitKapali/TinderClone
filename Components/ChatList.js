@@ -30,7 +30,7 @@ const ChatList = () => {
   return matches && matches.length > 0 ? (
     <FlatList
       style={{
-        backgroundColor: "pink",
+        backgroundColor: "white",
         height: "100%",
       }}
       data={matches}

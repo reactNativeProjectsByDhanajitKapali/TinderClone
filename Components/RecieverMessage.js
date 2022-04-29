@@ -6,8 +6,14 @@ const RecieverMessage = ({ message }) => {
     <View style={{ flexDirection: "row", marginBottom: 10 }}>
       <Image
         source={{ uri: message.photoURL }}
-        style={{ height: 45, width: 45, marginLeft: 5, marginTop: 5 }}
-        resizeMode="contain"
+        style={{
+          height: 45,
+          width: 45,
+          marginLeft: 5,
+          marginTop: 5,
+          borderRadius: 22.5,
+        }}
+        //resizeMode="contain"
       />
       <View
         style={{

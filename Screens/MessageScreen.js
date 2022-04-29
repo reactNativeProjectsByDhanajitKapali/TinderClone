@@ -39,7 +39,7 @@ const MessageScreen = () => {
     () =>
       onSnapshot(
         query(
-          collection(db, "matches", matchDetails.id, "messages"),
+          collection(db, "matches", matchDetails?.id, "messages"),
           orderBy("timestamp", "asc")
         ),
         (snapshot) =>
@@ -50,7 +50,7 @@ const MessageScreen = () => {
             }))
           )
       ),
-    [matchDetails, id]
+    [matchDetails, db]
   );
 
   const getMatchedUserInfo = (users, userLogedIn) => {
@@ -74,7 +74,7 @@ const MessageScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "pink", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
       <Header
         title={getMatchedUserInfo(matchDetails?.users, user.uid)?.displayName}
         callEnabled
@@ -82,7 +82,7 @@ const MessageScreen = () => {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1, backgroundColor: "green" }}
+        style={{ flex: 1, backgroundColor: "#F7F5F2" }}
         keyboardVerticalOffset={10}
       >
         <TouchableWithoutFeedback>
@@ -111,7 +111,7 @@ const MessageScreen = () => {
         >
           <TextInput
             style={{
-              //textAlign: "center",
+              fontSize: 18,
               height: 45,
               borderColor: "black",
               borderWidth: 0.2,
