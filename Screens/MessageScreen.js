@@ -68,8 +68,6 @@ const MessageScreen = () => {
     [matchDetails, id]
   );
 
-  console.log(messages);
-
   const getMatchedUserInfo = (users, userLogedIn) => {
     const newUsers = { ...users };
     delete newUsers[userLogedIn];
@@ -108,9 +106,9 @@ const MessageScreen = () => {
             keyExtractor={(item) => item.id}
             renderItem={({ item: message }) =>
               message.userId === user.uid ? (
-                <SenderMessage key={message.id} message={message} />
+                <SenderMessage key={message} message={message} />
               ) : (
-                <RecieverMessage key={message.id} message={message} />
+                <RecieverMessage key={message} message={message} />
               )
             }
           />
