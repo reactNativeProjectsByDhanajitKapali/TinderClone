@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 
 const ChatRow = ({ matchDetails }) => {
   const navigation = useNavigation();
-  const user = useAuth();
+  const { user } = useAuth();
   const [matchedUserInfo, setMatchedUserInfo] = useState(null);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const ChatRow = ({ matchDetails }) => {
           borderWidth: 0.2,
           borderColor: "gray",
         }}
+        onPress={() => navigation.navigate("Message", { matchDetails })}
       >
         <Image
           source={{ uri: matchedUserInfo?.photoURL }}
