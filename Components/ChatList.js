@@ -1,4 +1,10 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { onSnapshot, collection, query, where } from "@firebase/firestore";
 import { db } from "../firebase";
@@ -39,7 +45,7 @@ const ChatList = () => {
     />
   ) : (
     <View>
-      <Text>Lol</Text>
+      <ActivityIndicator size="large" />
     </View>
   );
 };

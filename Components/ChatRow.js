@@ -16,7 +16,7 @@ const ChatRow = ({ matchDetails }) => {
   const navigation = useNavigation();
   const { user } = useAuth();
   const [matchedUserInfo, setMatchedUserInfo] = useState(null);
-  const [lastMessage, setLastMessage] = useState("Say Ho");
+  const [lastMessage, setLastMessage] = useState("Say Hi");
 
   useEffect(() => {
     setMatchedUserInfo(getMatchedUserInfo(matchDetails.users, user.uid));

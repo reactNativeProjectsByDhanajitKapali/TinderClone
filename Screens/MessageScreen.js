@@ -40,7 +40,7 @@ const MessageScreen = () => {
       onSnapshot(
         query(
           collection(db, "matches", matchDetails?.id, "messages"),
-          orderBy("timestamp", "asc")
+          orderBy("timestamp", "desc")
         ),
         (snapshot) =>
           setMessages(
@@ -87,6 +87,7 @@ const MessageScreen = () => {
       >
         <TouchableWithoutFeedback>
           <FlatList
+            inverted
             data={messages}
             style={{ padding: 4 }}
             keyExtractor={(item) => item.id}
