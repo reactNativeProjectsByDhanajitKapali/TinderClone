@@ -2,11 +2,21 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/core";
 import useAuth from "../hooks/useAuth";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
+import { db } from "../firebase";
 
 const ChatRow = ({ matchDetails }) => {
   const navigation = useNavigation();
   const { user } = useAuth();
   const [matchedUserInfo, setMatchedUserInfo] = useState(null);
+  const [lastMessage, setLastMessage] = useState("Say Ho");
 
   useEffect(() => {
     setMatchedUserInfo(getMatchedUserInfo(matchDetails.users, user.uid));
@@ -15,6 +25,18 @@ const ChatRow = ({ matchDetails }) => {
     }, 500);
   }, [matchDetails, user]);
 
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, "matches", matchDetails.id, "messages"),
+          orderBy("timestamp", "desc")
+        ),
+        (snapshot) => setLastMessage(snapshot.docs[0]?.data()?.message)
+      ),
+    [matchDetails, id]
+  );
+
   const getMatchedUserInfo = (users, userLogedIn) => {
     const newUsers = { ...users };
     delete newUsers[userLogedIn];
@@ -22,6 +44,7 @@ const ChatRow = ({ matchDetails }) => {
     const [id, theUser] = Object.entries(newUsers).flat();
     return { id, ...theUser };
   };
+
   return (
     <View style={{ backgroundColor: "white" }}>
       <TouchableOpacity
@@ -47,7 +70,7 @@ const ChatRow = ({ matchDetails }) => {
           <Text style={{ fontWeight: "600", fontSize: 22 }}>
             {matchedUserInfo?.displayName}
           </Text>
-          <Text style={{ fontSize: 15 }}>Say Hi</Text>
+          <Text style={{ fontSize: 15 }}>{lastMessage}</Text>
         </View>
       </TouchableOpacity>
     </View>

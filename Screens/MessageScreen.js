@@ -33,22 +33,7 @@ const MessageScreen = () => {
   const { params } = useRoute();
   const { matchDetails } = params;
   const [inputMessage, setInputMessage] = useState();
-  const [messages, setMessages] = useState([
-    "Hi",
-    "Lol",
-    "Yo",
-    "Boom",
-    "Hello",
-    "Yo",
-    "Boom",
-    "Hello",
-    "Yo",
-    "Boom",
-    "Hello",
-    "Yo",
-    "Boom",
-    "Hello",
-  ]);
+  const [messages, setMessages] = useState([]);
 
   useEffect(
     () =>
@@ -98,6 +83,7 @@ const MessageScreen = () => {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1, backgroundColor: "green" }}
+        keyboardVerticalOffset={10}
       >
         <TouchableWithoutFeedback>
           <FlatList
