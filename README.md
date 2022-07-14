@@ -20,7 +20,7 @@ https://user-images.githubusercontent.com/37000235/165935552-2e7266c1-7360-4c65-
 
 ![tinderPresentation](https://user-images.githubusercontent.com/37000235/178899994-14b2b94d-e380-4089-8325-95dba7789807.png)
 
-
+<!--
 <table>
         <tr>
           <td><img src = "https://github.com/dhanajitkapali/myDigitalAssets/blob/master/ProjectScreenshots/TinderCloneReactNative/TinderClone1.PNG" height="790" width="400" ></td>
@@ -52,5 +52,4 @@ https://user-images.githubusercontent.com/37000235/165935552-2e7266c1-7360-4c65-
         </tr>
 </table>    
 
-
-
+-->
